@@ -1,20 +1,20 @@
 import streamlit as st
 import yt_dlp
-import asyncio
 import nest_asyncio
 from deepgram import DeepgramClient, PrerecordedOptions
 import os
 
-# Setup
-load_dotenv()
+# Apply async patch for Streamlit
 nest_asyncio.apply()
 
+# Load API key from Streamlit secrets
 DEEPGRAM_API_KEY = st.secrets["DEEPGRAM_API_KEY"]
 
-# UI
+# UI setup
 st.set_page_config(page_title="Transcribe", layout="centered")
 st.title("🎙️ Transcribe Audio or Video to Text")
 
+# Tabbed layout for upload vs URL
 tab_upload, tab_link = st.tabs(["Upload", "From link"])
 
 uploaded_file = None
@@ -29,7 +29,6 @@ with tab_link:
     video_url = st.text_input("Enter your link here...", placeholder="e.g. https://youtube.com/...")
 
 # Helpers
-
 def save_uploaded_file(file):
     path = os.path.join("/tmp", file.name)
     with open(path, "wb") as f:
@@ -64,9 +63,12 @@ def transcribe_file(mp3_path):
 
     with open(mp3_path, "rb") as f:
         response = dg.listen.prerecorded.v("1").transcribe_file(f, options)
-    return response["results"]["channels"][0]["alternatives"][0]["transcript"]
 
-# Trigger
+    # Extract transcript text from response
+    transcript = response["results"]["channels"][0]["alternatives"][0]["transcript"]
+    return transcript
+
+# Main logic
 if uploaded_file or video_url:
     if st.button("🧠 Transcribe"):
         audio_path = None
