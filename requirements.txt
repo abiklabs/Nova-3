@@ -1,0 +1,5 @@
+streamlit
+yt-dlp
+deepgram-sdk>=3.0.0
+python-dotenv
+nest_asyncio
