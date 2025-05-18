@@ -4,13 +4,12 @@ import asyncio
 import nest_asyncio
 from deepgram import DeepgramClient, PrerecordedOptions
 import os
-from dotenv import load_dotenv
 
 # Setup
 load_dotenv()
 nest_asyncio.apply()
 
-DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
+DEEPGRAM_API_KEY = st.secrets["DEEPGRAM_API_KEY"]
 
 # UI
 st.set_page_config(page_title="Transcribe", layout="centered")
