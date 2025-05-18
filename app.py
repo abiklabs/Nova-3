@@ -60,7 +60,10 @@ def transcribe_file(mp3_path):
         paragraphs=True,
         diarize=True,
     )
-    response = dg.listen.prerecorded.v("1").transcribe_path(mp3_path, options)
+
+    with open(mp3_path, "rb") as f:
+        response = dg.listen.prerecorded.v("1").transcribe_file(f, options)
+
     transcript = response["results"]["channels"][0]["alternatives"][0]["transcript"]
     return transcript
 
